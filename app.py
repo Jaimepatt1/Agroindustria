@@ -74,7 +74,7 @@ if menu == "Visualización":
 
     # 9. Implementar Pestañas
     st.subheader("📌 Navegación entre Pestañas")
-    tab1, tab2, tab3 = st.tabs(["📊 Gráficos", "📂 Datos", "📈 Histograma"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["📊 Gráficos", "📂 Datos", "📈 Histograma", "📉 Línea", "🥧 Torta"])
     with tab1:
         st.subheader("Visualización de Datos")
 
@@ -106,6 +106,33 @@ if menu == "Visualización":
         ax.set_xlabel(hist_var)
         ax.set_ylabel('Frecuencia')
         st.pyplot(fig)
+        
+    with tab4:
+        st.subheader("Gráfico de Línea")
+        line_x_var = st.selectbox('Selecciona la variable del eje X para el gráfico de línea', ["Fecha"] + variables)
+        line_y_var = st.selectbox('Selecciona la variable del eje Y para el gráfico de línea', variables)
+
+        fig_line = px.line(
+            filtered_data,
+            x=line_x_var,
+            y=line_y_var,
+            color="Región",
+            title=f"Tendencia de {line_y_var} a lo largo de {line_x_var} por Región",
+        )
+        st.plotly_chart(fig_line)
+    
+    with tab5:
+        st.subheader("Gráfico de Torta")
+        pie_var = st.selectbox('Selecciona la variable para el gráfico de torta', ["Región", "Cultivo"])
+
+        fig_pie = px.pie(
+            filtered_data,
+            names=pie_var,
+            title=f"Distribución de {pie_var}",
+            hole=0.3
+        )
+        fig_pie.update_traces(textinfo='percent+label')
+        st.plotly_chart(fig_pie)
 
 # 10. Mensaje de Confirmación
 st.sidebar.success("🎉 Configuración completa")
