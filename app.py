@@ -71,7 +71,7 @@ if menu == "Visualización":
 
     # 9. Implementar Pestañas
     st.subheader("📌 Navegación entre Pestañas")
-    tab1, tab2 = st.tabs(["📊 Gráficos", "📂 Datos"])
+    tab1, tab2, tab3 = st.tabs(["📊 Gráficos", "📂 Datos", "📈 Histograma"])
     with tab1:
         st.subheader("Visualización de Datos")
 
@@ -92,6 +92,17 @@ if menu == "Visualización":
     with tab2:
         st.subheader("Datos Crudos")
         st.dataframe(filtered_data)
+
+    with tab3:
+        st.subheader("Histograma")
+        hist_var = st.selectbox('Selecciona la variable para el histograma', variables)
+
+        fig, ax = plt.subplots()
+        ax.hist(filtered_data[hist_var], bins=20, edgecolor='black')
+        ax.set_title(f"Distribución de {hist_var}")
+        ax.set_xlabel(hist_var)
+        ax.set_ylabel('Frecuencia')
+        st.pyplot(fig)
 
 # 10. Mensaje de Confirmación
 st.sidebar.success("🎉 Configuración completa")
