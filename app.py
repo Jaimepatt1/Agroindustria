@@ -18,12 +18,15 @@ st.sidebar.title("🔍 Opciones de Navegación")
 # 2. Generación de Datos Aleatorios
 np.random.seed(42)
 data = pd.DataFrame({
-    "Fecha": pd.date_range(start="2024-01-01", periods=100, freq="D"),
-    "Ventas": np.random.randint(100, 500, size=100),
-    "Categoría": np.random.choice(["A", "B", "C", "D"], size=100),
-    "Descuento": np.random.uniform(5, 30, size=100),
-    "Satisfacción": np.random.randint(1, 10, size=100),
-    "Región": np.random.choice(["Norte", "Sur", "Este", "Oeste"], size=100)
+    "Fecha": pd.date_range(start="2024-01-01", periods=150, freq="D"),
+    "Producción_Ton": np.random.randint(100, 2000, size=150),
+    "Área_Ha": np.random.randint(50, 500, size=150),
+    "Costo_Producción": np.random.uniform(1000, 10000, size=150),
+    "Precio_Mercado": np.random.uniform(500, 5000, size=150),
+    "Rendimiento": np.random.uniform(0.5, 2.5, size=150),
+    "Exportaciones_Ton": np.random.randint(0, 1500, size=150),
+    "Región": np.random.choice(["Norte", "Sur", "Este", "Oeste"], size=150),
+    "Cultivo": np.random.choice(["Café", "Cacao", "Banano", "Palma"], size=150)
 })
 
 # 3. Implementación de la Barra de Navegación
@@ -37,23 +40,23 @@ if menu == "Datos":
     st.subheader("📂 Datos Generados")
     st.dataframe(data)
 
-# 5. Filtrar por Categoría
+# 5. Filtrar por Cultivo
 filtered_data = data  # Asegurar que filtered_data esté definido en todo el script
 if menu == "Visualización":
     st.subheader("📊 Visualización de Datos")
-    categoria = st.sidebar.selectbox("Selecciona una categoría", data["Categoría"].unique())
-    filtered_data = data[data["Categoría"] == categoria]
-    st.write(f"Mostrando datos para la categoría {categoria}")
+    cultivo = st.sidebar.selectbox("Selecciona un cultivo", data["Cultivo"].unique())
+    filtered_data = data[data["Cultivo"] == cultivo]
+    st.write(f"Mostrando datos para el cultivo {cultivo}")
     st.dataframe(filtered_data)
 
-    # 6. Filtrar por Ventas
-    ventas_min, ventas_max = st.sidebar.slider(
-        "Selecciona el rango de ventas:",
-        min_value=int(data["Ventas"].min()),
-        max_value=int(data["Ventas"].max()),
-        value=(int(data["Ventas"].min()), int(data["Ventas"].max()))
+    # 6. Filtrar por Producción
+    prod_min, prod_max = st.sidebar.slider(
+        "Selecciona el rango de producción (Ton):",
+        min_value=int(data["Producción_Ton"].min()),
+        max_value=int(data["Producción_Ton"].max()),
+        value=(int(data["Producción_Ton"].min()), int(data["Producción_Ton"].max()))
     )
-    filtered_data = filtered_data[(filtered_data["Ventas"] >= ventas_min) & (filtered_data["Ventas"] <= ventas_max)]
+    filtered_data = filtered_data[(filtered_data["Producción_Ton"] >= prod_min) & (filtered_data["Producción_Ton"] <= prod_max)]
 
     # 7. Filtrar por Fecha
     fecha_inicio, fecha_fin = st.sidebar.date_input(
@@ -76,7 +79,7 @@ if menu == "Visualización":
         st.subheader("Visualización de Datos")
 
         # Selección de variables para la figura
-        variables = ["Ventas", "Descuento", "Satisfacción"]
+        variables = ["Producción_Ton", "Área_Ha", "Costo_Producción", "Precio_Mercado", "Rendimiento", "Exportaciones_Ton"]
         x_var = st.selectbox('Selecciona la variable del eje X', variables)
         y_var = st.selectbox('Selecciona la variable del eje Y', variables)
 
